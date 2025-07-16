@@ -1,0 +1,93 @@
+<?php
+class Ingreso {
+    private $conn;
+    private $table = 'Ingresos';
+
+    public function __construct($db) {
+        $this->conn = $db;
+    }
+
+    // Listar todos activos
+    public function getAll() {
+        $query = "SELECT * FROM {$this->table} WHERE IN_TIPO != 'I'";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt;
+    }
+
+    // Obtener por ID
+    public function getById($id) {
+        $query = "SELECT * FROM {$this->table} WHERE IN_ID = :id AND IN_TIPO != 'I'";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        return $stmt;
+    }
+
+    // Generar nuevo ID
+    public function generateNewId() {
+        $query = "SELECT IN_ID FROM {$this->table} ORDER BY IN_ID DESC LIMIT 1";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($row) {
+            $num = intval(substr($row['IN_ID'], 2)) + 1;
+        } else {
+            $num = 1;
+        }
+        return 'IN' . str_pad($num, 5, '0', STR_PAD_LEFT);
+    }
+
+    // Crear ingreso
+    public function create($id, $data) {
+        $query = "INSERT INTO {$this->table} (IN_ID, IN_CEL_ID, IN_PER_ID, IN_DESCRIPCION, IN_MONTO, IN_FECHA, IN_TIPO) 
+                  VALUES (:id, :celula, :persona, :descripcion, :monto, :fecha, :tipo)";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':celula', $data['IN_CEL_ID']);
+        $stmt->bindParam(':persona', $data['IN_PER_ID']);
+        $stmt->bindParam(':descripcion', $data['IN_DESCRIPCION']);
+        $stmt->bindParam(':monto', $data['IN_MONTO']);
+        $stmt->bindParam(':fecha', $data['IN_FECHA']);
+        $stmt->bindParam(':tipo', $data['IN_TIPO']);
+        return $stmt->execute();
+    }
+
+    // Actualizar ingreso
+    public function update($id, $data) {
+        $query = "UPDATE {$this->table} SET 
+                     IN_CEL_ID = :celula,
+                     IN_PER_ID = :persona,
+                     IN_DESCRIPCION = :descripcion,
+                     IN_MONTO = :monto,
+                     IN_FECHA = :fecha,
+                     IN_TIPO = :tipo
+                  WHERE IN_ID = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':celula', $data['IN_CEL_ID']);
+        $stmt->bindParam(':persona', $data['IN_PER_ID']);
+        $stmt->bindParam(':descripcion', $data['IN_DESCRIPCION']);
+        $stmt->bindParam(':monto', $data['IN_MONTO']);
+        $stmt->bindParam(':fecha', $data['IN_FECHA']);
+        $stmt->bindParam(':tipo', $data['IN_TIPO']);
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute();
+    }
+
+    // Borrado lógico (marcando IN_TIPO = 'I' → inactivo)
+    public function delete($id) {
+        $query = "UPDATE {$this->table} SET IN_TIPO = 'I' WHERE IN_ID = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute();
+    }
+
+    // Filtrar por célula
+    public function getByCelula($celulaId) {
+        $query = "SELECT * FROM {$this->table} WHERE IN_CEL_ID = :celula AND IN_TIPO != 'I'";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':celula', $celulaId);
+        $stmt->execute();
+        return $stmt;
+    }
+}
