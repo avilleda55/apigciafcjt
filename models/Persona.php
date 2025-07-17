@@ -84,14 +84,14 @@ class Persona {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
         
        if ($user) {
-            if (password_verify($password, $user['PR_AUTH_TEXT'])) {
+            if (password_verify($password, $user['pr_auth_text'])) {
                 error_log("✅ Contraseña OK");
-                unset($user['PR_AUTH_TEXT']);
+                unset($user['pr_auth_text']);
                 return $user;
             } else {
                 error_log("❌ password_verify falló");
                 error_log("Input: [$password]");
-                error_log("Hash: [{$user['PR_AUTH_TEXT']}]");
+                error_log("Hash: [{$user['pr_auth_text']}]");
                 return false;
             }
         } else {
