@@ -26,7 +26,7 @@ class Persona {
 
     // Generar nuevo ID
     public function generateNewId() {
-        $query = "SELECT PE_ID FROM {$this->table} ORDER BY PE_ID DESC LIMIT 1";
+        $query = "SELECT PE_ID FROM {$this->table} WHERE PE_ID ~ '^PE[0-9]+$' ORDER BY CAST(SUBSTRING(PE_ID, 3) AS INTEGER) DESC LIMIT 1";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
