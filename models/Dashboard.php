@@ -73,7 +73,7 @@ class Dashboard {
 }
 
 
-    public function getMonthlyEvolution($rol, $celulaId = null) {
+  public function getMonthlyEvolution($rol, $celulaId = null) {
     $condIn = ["IN_TIPO != 'I'"];
     $condEg = ["EG_ACTIVO = 'A'"];
 
@@ -87,10 +87,13 @@ class Dashboard {
 
     $query = "
         SELECT 'Ingreso' as tipo, TO_CHAR(IN_FECHA, 'YYYY-MM') as periodo, SUM(IN_MONTO) as total 
-        FROM Ingresos $whereIn GROUP BY periodo
+        FROM Ingresos $whereIn 
+        GROUP BY TO_CHAR(IN_FECHA, 'YYYY-MM')
         UNION ALL
-        SELECT 'Egreso', TO_CHAR(EG_FECHA, 'YYYY-MM'), SUM(EG_MONTO)
-        FROM Egresos $whereEg GROUP BY periodo
+        SELECT 'Egreso', TO_CHAR(EG_FECHA, 'YYYY-MM') as periodo, SUM(EG_MONTO)
+        FROM Egresos $whereEg 
+        GROUP BY TO_CHAR(EG_FECHA, 'YYYY-MM')
+        ORDER BY periodo
     ";
 
     $stmt = $this->conn->prepare($query);
@@ -100,5 +103,6 @@ class Dashboard {
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
 
 }
