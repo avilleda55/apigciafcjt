@@ -1,9 +1,9 @@
 <?php
 class Database {
-    private $host = 'db.cazhqayrvvtunzbsylcq.supabase.co';
-    private $db_name = 'postgres';
-    private $username = 'postgres';
-    private $password = 'Nhghdtcd55*';
+    private $host = 'ep-summer-sea-aevlmy8b-pooler.c-2.us-east-2.aws.neon.tech';
+    private $db_name = 'neondb';
+    private $username = 'neondb_owner';
+    private $password = 'npg_Sxigy2aYEF5q';
     public $conn;
 
     public function getConnection() {
