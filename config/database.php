@@ -1,28 +1,24 @@
 <?php
 class Database {
-    private $host = 'sql206.infinityfree.com';
-    private $db_name = 'if0_39471125_gestion';
-    private $username = 'if0_39471125';
-    private $password = 'sw8GXQMiBzcOqXC';
+    private $host = 'db.cazhqayrvvtunzbsylcq.supabase.co';
+    private $db_name = 'postgres';
+    private $username = 'postgres';
+    private $password = 'Nhghdtcd55*';
     public $conn;
 
     public function getConnection() {
         $this->conn = null;
         try {
-            $this->conn = new PDO(
-                "mysql:host=".$this->host.";dbname=".$this->db_name.";charset=utf8",
-                $this->username,
-                $this->password
-            );
+            $dsn = "pgsql:host={$this->host};port=5432;dbname={$this->db_name};sslmode=require";
+            $this->conn = new PDO($dsn, $this->username, $this->password);
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch(PDOException $exception) {
-            echo json_encode(['error' => "Connection error: " . $exception->getMessage()]);
-            exit;
+        } catch (PDOException $exception) {
+            echo "Error de conexión: " . $exception->getMessage();
         }
         return $this->conn;
     }
 
-     public function closeConnection() {
+    public function closeConnection() {
         $this->conn = null;
     }
 }
