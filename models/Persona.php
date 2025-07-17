@@ -85,12 +85,19 @@ class Persona {
         $stmt->bindParam(':email', $email);
         $stmt->execute();
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($user && password_verify($password, $user['PR_AUTH_TEXT'])) {
-            unset($user['PR_AUTH_TEXT']); // no regresamos hash al frontend
-            return $user;
-        } else {
+        
+        if (!$user) {
+            error_log("⚠️ Usuario no encontrado o inactivo");
             return false;
         }
+
+        if (!password_verify($password, $user['PR_AUTH_TEXT'])) {
+            error_log("⚠️ Contraseña incorrecta");
+            return false;
+        }
+
+        unset($user['PR_AUTH_TEXT']); 
+        return $user;
     }
 
     // Cambiar contraseña
