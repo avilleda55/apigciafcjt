@@ -59,10 +59,10 @@ class Dashboard {
         $whereEg = ($rol === 'TC') ? "WHERE EG_CEL_ID = :celula AND EG_ACTIVO = 'A'" : "WHERE EG_ACTIVO = 'A'";
 
         $query = "
-            SELECT 'Ingreso' as tipo, DATE_FORMAT(IN_FECHA, '%Y-%m') as periodo, SUM(IN_MONTO) as total 
+            SELECT 'Ingreso' as tipo, TO_CHAR(IN_FECHA, 'YYYY-MM') as periodo, SUM(IN_MONTO) as total 
             FROM Ingresos $whereIn GROUP BY periodo
             UNION ALL
-            SELECT 'Egreso', DATE_FORMAT(EG_FECHA, '%Y-%m'), SUM(EG_MONTO)
+            SELECT 'Egreso', TO_CHAR(EG_FECHA, 'YYYY-MM'), SUM(EG_MONTO)
             FROM Egresos $whereEg GROUP BY periodo
         ";
 

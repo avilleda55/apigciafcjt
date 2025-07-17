@@ -45,11 +45,11 @@ class EstadoCuenta {
         $whereEg = $this->getWhere($rol, $celulaId);
 
         $query = "
-            SELECT 'Ingreso' as tipo, DATE_FORMAT(IN_FECHA, '%Y-%m') as periodo, SUM(IN_MONTO) as total 
+            SELECT 'Ingreso' as tipo, TO_CHAR(IN_FECHA, 'YYYY-MM') as periodo, SUM(IN_MONTO) as total 
             FROM Ingresos $whereIn AND IN_FECHA BETWEEN :inicio AND :fin AND IN_TIPO != 'I'
             GROUP BY periodo
             UNION ALL
-            SELECT 'Egreso', DATE_FORMAT(EG_FECHA, '%Y-%m'), SUM(EG_MONTO)
+            SELECT 'Egreso', TO_CHAR(EG_FECHA, 'YYYY-MM'), SUM(EG_MONTO)
             FROM Egresos $whereEg AND EG_FECHA BETWEEN :inicio AND :fin AND EG_ACTIVO = 'A'
             GROUP BY periodo
         ";
