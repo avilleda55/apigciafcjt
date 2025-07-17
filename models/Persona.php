@@ -83,18 +83,22 @@ class Persona {
         $stmt->execute();
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
         
-        if (!$user) {
-            error_log("⚠️ Usuario no encontrado o inactivo");
+       if ($user) {
+            if (password_verify($password, $user['PR_AUTH_TEXT'])) {
+                error_log("✅ Contraseña OK");
+                unset($user['PR_AUTH_TEXT']);
+                return $user;
+            } else {
+                error_log("❌ password_verify falló");
+                error_log("Input: [$password]");
+                error_log("Hash: [{$user['PR_AUTH_TEXT']}]");
+                return false;
+            }
+        } else {
+            error_log("❌ Usuario no encontrado");
             return false;
         }
 
-        if (!password_verify($password, $user['PR_AUTH_TEXT'])) {
-            error_log("⚠️ Contraseña incorrecta");
-            return false;
-        }
-
-        unset($user['PR_AUTH_TEXT']); 
-        return $user;
     }
 
     // Cambiar contraseña
