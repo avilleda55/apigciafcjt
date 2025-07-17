@@ -3,16 +3,4 @@ RewriteEngine On
 # Redirige todas las peticiones que no sean archivos o carpetas existentes a index.php
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php [QSA,L]
-RewriteEngine On
-
-# Redirige todas las peticiones que no sean archivos o carpetas existentes a index.php
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php [QSA,L]
-RewriteEngine On
-
-# Redirige todas las peticiones que no sean archivos o carpetas existentes a index.php
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php [QSA,L]
+RewriteRule ^ index.php [QSA,L]
