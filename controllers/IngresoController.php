@@ -1,6 +1,6 @@
 <?php
-require_once '../config/database.php';
-require_once '../models/Ingreso.php';
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../models/Ingreso.php';
 
 class IngresoController {
     private $db;
@@ -50,7 +50,7 @@ class IngresoController {
         $newId = $this->ingreso->generateNewId();
         $this->ingreso->create($newId, $data);
 
-        require_once '../models/Actividad.php';
+        require_once __DIR__ . '/../models/Actividad.php';
         $actividad = new Actividad($this->conn);
         $actividad->logAction([
             'AC_ID' => $actividad->generateNewId(),
@@ -76,7 +76,7 @@ class IngresoController {
         $updated = $this->ingreso->update($id, $data);
 
         if ($updated) {
-            require_once '../models/Actividad.php';
+            require_once __DIR__ . '/../models/Actividad.php';
             $actividad = new Actividad($this->conn);
             $actividad->logAction([
                 'AC_ID' => $actividad->generateNewId(),
@@ -105,7 +105,7 @@ class IngresoController {
         $deleted = $this->ingreso->delete($id);
 
         if ($deleted) {
-            require_once '../models/Actividad.php';
+            require_once __DIR__ . '/../models/Actividad.php';
             $actividad = new Actividad($this->conn);
             $actividad->logAction([
                 'AC_ID' => $actividad->generateNewId(),

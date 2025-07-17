@@ -10,7 +10,7 @@ $requestMethod = $_SERVER['REQUEST_METHOD'];
 $path = parse_url($requestUri, PHP_URL_PATH);
 
 // Quitar el prefijo '/api/' si lo tienes montado así (ajusta según tu carpeta)
-$path = str_replace('/api/', '', $path);
+$path = str_replace('/apigciafcjt/', '', $path);
 
 // Dividir la ruta en partes
 $pathParts = explode('/', trim($path, '/'));
@@ -23,7 +23,7 @@ $id = isset($pathParts[1]) ? $pathParts[1] : null;
 // --- Routing simple ---
 switch ($resource) {
     case 'celulas':
-        require_once '../controllers/CelulaController.php';
+        require_once __DIR__ . '/../controllers/CelulaController.php';
         $controller = new CelulaController();
 
         switch ($requestMethod) {
@@ -58,7 +58,7 @@ switch ($resource) {
         break;
 
     case 'personas':
-    require_once '../controllers/PersonaController.php';
+    require_once __DIR__ . '/../controllers/PersonaController.php';
     $controller = new PersonaController();
 
     switch ($requestMethod) {
@@ -103,7 +103,7 @@ switch ($resource) {
     }
     break;
     case 'ingresos':
-    require_once '../controllers/IngresoController.php';
+    require_once __DIR__ . '/../controllers/IngresoController.php';
     $controller = new IngresoController();
 
     switch ($requestMethod) {
@@ -146,7 +146,7 @@ switch ($resource) {
     }
     break;
     case 'egresos':
-    require_once '../controllers/EgresoController.php';
+    require_once __DIR__ . '/../controllers/EgresoController.php';
     $controller = new EgresoController();
 
     switch ($requestMethod) {
@@ -189,7 +189,7 @@ switch ($resource) {
     }
     break;
     case 'actividades':
-    require_once '../controllers/ActividadController.php';
+    require_once __DIR__ . '/../controllers/ActividadController.php';
     $controller = new ActividadController();
 
     switch ($requestMethod) {
@@ -203,7 +203,7 @@ switch ($resource) {
     }
     break;
     case 'dashboards':
-    require_once '../controllers/DashboardController.php';
+    require_once __DIR__ . '/../controllers/DashboardController.php';
     $controller = new DashboardController();
 
     switch ($requestMethod) {
@@ -215,7 +215,19 @@ switch ($resource) {
             echo json_encode(['error' => 'Método no permitido']);
     }
     break;
+    case 'estado-cuenta':
+    require_once __DIR__ . '/../controllers/EstadoCuentaController.php';
+    $controller = new EstadoCuentaController();
 
+    switch ($requestMethod) {
+        case 'POST':
+            $controller->generarEstadoCuenta();
+            break;
+        default:
+            http_response_code(405);
+            echo json_encode(['error' => 'Método no permitido']);
+    }
+    break;
 
 
 

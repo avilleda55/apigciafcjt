@@ -1,6 +1,6 @@
 <?php
-require_once '../config/database.php';
-require_once '../models/Persona.php';
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../models/Persona.php';
 
 class PersonaController {
     private $db;
@@ -51,7 +51,7 @@ class PersonaController {
         $this->persona->create($newId, $data);
 
         // Registrar en Actividad
-        require_once '../models/Actividad.php';
+        require_once __DIR__ . '/../models/Actividad.php';
         $actividad = new Actividad($this->conn);
         $actividad->logAction([
             'AC_ID' => $actividad->generateNewId(),
@@ -77,7 +77,7 @@ class PersonaController {
         $updated = $this->persona->update($id, $data);
 
         if ($updated) {
-            require_once '../models/Actividad.php';
+            require_once __DIR__ . '/../models/Actividad.php';
             $actividad = new Actividad($this->conn);
             $actividad->logAction([
                 'AC_ID' => $actividad->generateNewId(),
@@ -106,7 +106,7 @@ class PersonaController {
         $deleted = $this->persona->delete($id);
 
         if ($deleted) {
-            require_once '../models/Actividad.php';
+            require_once __DIR__ . '/../models/Actividad.php';
             $actividad = new Actividad($this->conn);
             $actividad->logAction([
                 'AC_ID' => $actividad->generateNewId(),

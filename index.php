@@ -1,4 +1,8 @@
 <?php
+//echo "Hola, el backend responde.";
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
+//error_reporting(E_ALL);
 // Configurar headers generales
 header("Access-Control-Allow-Origin: *"); // ⚠️ OJO: abre para todos, puedes restringir por dominio
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");

@@ -2,7 +2,7 @@
 class Database {
     private $host = 'sql206.infinityfree.com';
     private $db_name = 'if0_39471125_gestion';
-    private $username = 'sql206.infinityfree.com';
+    private $username = 'if0_39471125';
     private $password = 'sw8GXQMiBzcOqXC';
     public $conn;
 

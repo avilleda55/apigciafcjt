@@ -1,6 +1,6 @@
 <?php
-require_once '../config/database.php';
-require_once '../models/Egreso.php';
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../models/Egreso.php';
 
 class EgresoController {
     private $db;
@@ -46,7 +46,7 @@ class EgresoController {
         $newId = $this->egreso->generateNewId();
         $this->egreso->create($newId, $data);
 
-        require_once '../models/Actividad.php';
+        require_once __DIR__ . '/../models/Actividad.php';
         $actividad = new Actividad($this->conn);
         $actividad->logAction([
             'AC_ID' => $actividad->generateNewId(),
@@ -70,7 +70,7 @@ class EgresoController {
         $updated = $this->egreso->update($id, $data);
 
         if ($updated) {
-            require_once '../models/Actividad.php';
+            require_once __DIR__ . '/../models/Actividad.php';
             $actividad = new Actividad($this->conn);
             $actividad->logAction([
                 'AC_ID' => $actividad->generateNewId(),
@@ -98,7 +98,7 @@ class EgresoController {
         $deleted = $this->egreso->delete($id);
 
         if ($deleted) {
-            require_once '../models/Actividad.php';
+            require_once __DIR__ . '/../models/Actividad.php';
             $actividad = new Actividad($this->conn);
             $actividad->logAction([
                 'AC_ID' => $actividad->generateNewId(),

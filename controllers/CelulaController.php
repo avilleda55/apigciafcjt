@@ -1,6 +1,6 @@
 <?php
-require_once '../config/database.php';
-require_once '../models/Celula.php';
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../models/Celula.php';
 
 class CelulaController {
     private $db;
@@ -46,7 +46,7 @@ class CelulaController {
         $newId = $this->celula->generateNewId();
         $this->celula->create($newId, $data);
 
-        require_once '../models/Actividad.php';
+        require_once __DIR__ . '/../models/Actividad.php';
         $actividad = new Actividad($this->conn);
         $actividad->logAction([
             'AC_ID' => $actividad->generateNewId(),
@@ -71,7 +71,7 @@ class CelulaController {
         $updated = $this->celula->update($id, $data);
 
         if ($updated) {
-            require_once '../models/Actividad.php';
+            require_once __DIR__ . '/../models/Actividad.php';
             $actividad = new Actividad($this->conn);
             $actividad->logAction([
                 'AC_ID' => $actividad->generateNewId(),
@@ -99,7 +99,7 @@ class CelulaController {
         $deleted = $this->celula->delete($id);
 
         if ($deleted) {
-            require_once '../models/Actividad.php';
+            require_once __DIR__ . '/../models/Actividad.php';
             $actividad = new Actividad($this->conn);
             $actividad->logAction([
                 'AC_ID' => $actividad->generateNewId(),
