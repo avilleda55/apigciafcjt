@@ -12,7 +12,7 @@ class Persona {
         $query = "SELECT * FROM {$this->table} WHERE PE_ACTIVO = 'A' ORDER BY PE_ID ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt;
     }
 
     // Obtener por ID

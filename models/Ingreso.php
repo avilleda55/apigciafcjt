@@ -12,7 +12,7 @@ class Ingreso {
         $query = "SELECT * FROM {$this->table} WHERE IN_TIPO != 'I' ORDER BY IN_FECHA DESC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt;
     }
     // Obtener por ID
     public function getById($id) {
@@ -20,7 +20,7 @@ class Ingreso {
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id);
         $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        return $stmt;
     }
 
     // Generar nuevo ID

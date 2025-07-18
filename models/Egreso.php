@@ -12,7 +12,7 @@ class Egreso {
         $query = "SELECT * FROM {$this->table} WHERE EG_ACTIVO = 'A' ORDER BY EG_FECHA DESC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt;
     }
 
     // Obtener por ID

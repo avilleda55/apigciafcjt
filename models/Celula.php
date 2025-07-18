@@ -11,7 +11,7 @@ class Celula {
         $query = "SELECT * FROM {$this->table} WHERE CE_ACTIVO = 'A' ORDER BY CE_ID ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt;
     }
 
 
