@@ -9,19 +9,18 @@ class Ingreso {
 
     // Listar todos activos
     public function getAll() {
-        $query = "SELECT * FROM {$this->table} WHERE IN_TIPO != 'I'";
+        $query = "SELECT * FROM {$this->table} WHERE IN_TIPO != 'I' ORDER BY IN_FECHA DESC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
-        return $stmt;
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
     // Obtener por ID
     public function getById($id) {
-        $query = "SELECT * FROM {$this->table} WHERE IN_ID = :id AND IN_TIPO != 'I'";
+        $query = "SELECT * FROM {$this->table} WHERE IN_ID = :id AND IN_TIPO != 'I' ORDER BY IN_FECHA DESC";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id);
         $stmt->execute();
-        return $stmt;
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     // Generar nuevo ID

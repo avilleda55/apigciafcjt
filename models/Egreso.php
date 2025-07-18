@@ -9,15 +9,15 @@ class Egreso {
 
     // Listar activos
     public function getAll() {
-        $query = "SELECT * FROM {$this->table} WHERE EG_ACTIVO = 'A'";
+        $query = "SELECT * FROM {$this->table} WHERE EG_ACTIVO = 'A' ORDER BY EG_FECHA DESC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
-        return $stmt;
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     // Obtener por ID
     public function getById($id) {
-        $query = "SELECT * FROM {$this->table} WHERE EG_ID = :id AND EG_ACTIVO = 'A'";
+        $query = "SELECT * FROM {$this->table} WHERE EG_ID = :id AND EG_ACTIVO = 'A' ORDER BY EG_FECHA DESC";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id);
         $stmt->execute();

@@ -7,7 +7,7 @@ class Actividad {
         $this->conn = $db;
     }
 
-    // Listar actividades con filtros opcionales
+   // Listar actividades con filtros opcionales y ordenar por ID ascendente
     public function getAll($filters = []) {
         $query = "SELECT * FROM {$this->table} WHERE 1=1";
 
@@ -20,6 +20,9 @@ class Actividad {
         if (!empty($filters['accion'])) {
             $query .= " AND AC_ACCION = :accion";
         }
+
+        // 🔥 Aquí agregamos el orden
+        $query .= " ORDER BY AC_ID ASC";
 
         $stmt = $this->conn->prepare($query);
 
@@ -37,6 +40,7 @@ class Actividad {
         $stmt->execute();
         return $stmt;
     }
+
 
     public function generateNewId() {
         $query = "SELECT COUNT(*) as total FROM {$this->table}";

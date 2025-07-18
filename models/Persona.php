@@ -9,10 +9,10 @@ class Persona {
 
     // Listar activas
     public function getAll() {
-        $query = "SELECT * FROM {$this->table} WHERE PE_ACTIVO = 'A'";
+        $query = "SELECT * FROM {$this->table} WHERE PE_ACTIVO = 'A' ORDER BY PE_ID ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
-        return $stmt;
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     // Obtener por ID

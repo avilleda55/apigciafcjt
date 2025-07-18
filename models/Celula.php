@@ -8,14 +8,15 @@ class Celula {
     }
 
     public function getAll() {
-        $query = "SELECT * FROM {$this->table} WHERE CE_ACTIVO = 'A'";
+        $query = "SELECT * FROM {$this->table} WHERE CE_ACTIVO = 'A' ORDER BY CE_ID ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
-        return $stmt;
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+
     public function getById($id) {
-        $query = "SELECT * FROM {$this->table} WHERE CE_ID = :id AND CE_ACTIVO = 'A'";
+        $query = "SELECT * FROM {$this->table} WHERE CE_ID = :id AND CE_ACTIVO = 'A' ORDER BY CE_ID ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id);
         $stmt->execute();
