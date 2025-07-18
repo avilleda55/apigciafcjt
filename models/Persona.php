@@ -42,11 +42,11 @@ class Persona {
                   VALUES (:id, :nombre, :email, :password, :rol, :celula, 'A')";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id);
-        $stmt->bindParam(':nombre', $data['PE_NOMBRE']);
-        $stmt->bindParam(':email', $data['PE_EMAIL']);
+        $stmt->bindParam(':nombre', $data['pe_nombre']);
+        $stmt->bindParam(':email', $data['pe_email']);
         $stmt->bindParam(':password', $hash);
-        $stmt->bindParam(':rol', $data['PE_ROL']);
-        $stmt->bindParam(':celula', $data['PE_CEL_ID']);
+        $stmt->bindParam(':rol', $data['pe_rol']);
+        $stmt->bindParam(':celula', $data['pe_cel_id']);
         return $stmt->execute();
     }
 
@@ -59,10 +59,10 @@ class Persona {
                      PE_CEL_ID = :celula
                   WHERE PE_ID = :id";
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':nombre', $data['PE_NOMBRE']);
-        $stmt->bindParam(':email', $data['PE_EMAIL']);
-        $stmt->bindParam(':rol', $data['PE_ROL']);
-        $stmt->bindParam(':celula', $data['PE_CEL_ID']);
+        $stmt->bindParam(':nombre', $data['pe_nombre']);
+        $stmt->bindParam(':email', $data['pe_email']);
+        $stmt->bindParam(':rol', $data['pe_rol']);
+        $stmt->bindParam(':celula', $data['pe_cel_id']);
         $stmt->bindParam(':id', $id);
         return $stmt->execute();
     }

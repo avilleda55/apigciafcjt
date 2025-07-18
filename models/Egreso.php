@@ -40,12 +40,12 @@ class Egreso {
                   VALUES (:id, :celula, :persona, :descripcion, :monto, :fecha, :tipo, 'A')";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id);
-        $stmt->bindParam(':celula', $data['EG_CEL_ID']);
-        $stmt->bindParam(':persona', $data['EG_PER_ID']);
-        $stmt->bindParam(':descripcion', $data['EG_DESCRIPCION']);
-        $stmt->bindParam(':monto', $data['EG_MONTO']);
-        $stmt->bindParam(':fecha', $data['EG_FECHA']);
-        $stmt->bindParam(':tipo', $data['EG_TIPO']);
+        $stmt->bindParam(':celula', $data['eg_cel_id']);
+        $stmt->bindParam(':persona', $data['eg_per_id']);
+        $stmt->bindParam(':descripcion', $data['eg_descripcion']);
+        $stmt->bindParam(':monto', $data['eg_monto']);
+        $stmt->bindParam(':fecha', $data['eg_fecha']);
+        $stmt->bindParam(':tipo', $data['eg_tipo']);
         return $stmt->execute();
     }
 
@@ -60,12 +60,12 @@ class Egreso {
                      EG_TIPO = :tipo
                   WHERE EG_ID = :id";
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':celula', $data['EG_CEL_ID']);
-        $stmt->bindParam(':persona', $data['EG_PER_ID']);
-        $stmt->bindParam(':descripcion', $data['EG_DESCRIPCION']);
-        $stmt->bindParam(':monto', $data['EG_MONTO']);
-        $stmt->bindParam(':fecha', $data['EG_FECHA']);
-        $stmt->bindParam(':tipo', $data['EG_TIPO']);
+        $stmt->bindParam(':celula', $data['eg_cel_id']);
+        $stmt->bindParam(':persona', $data['eg_per_id']);
+        $stmt->bindParam(':descripcion', $data['eg_descripcion']);
+        $stmt->bindParam(':monto', $data['eg_monto']);
+        $stmt->bindParam(':fecha', $data['eg_fecha']);
+        $stmt->bindParam(':tipo', $data['eg_tipo']);
         $stmt->bindParam(':id', $id);
         return $stmt->execute();
     }

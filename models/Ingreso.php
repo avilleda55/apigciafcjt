@@ -44,12 +44,12 @@ class Ingreso {
                   VALUES (:id, :celula, :persona, :descripcion, :monto, :fecha, :tipo)";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id);
-        $stmt->bindParam(':celula', $data['IN_CEL_ID']);
-        $stmt->bindParam(':persona', $data['IN_PER_ID']);
-        $stmt->bindParam(':descripcion', $data['IN_DESCRIPCION']);
-        $stmt->bindParam(':monto', $data['IN_MONTO']);
-        $stmt->bindParam(':fecha', $data['IN_FECHA']);
-        $stmt->bindParam(':tipo', $data['IN_TIPO']);
+        $stmt->bindParam(':celula', $data['in_cel_id']);
+        $stmt->bindParam(':persona', $data['in_per_id']);
+        $stmt->bindParam(':descripcion', $data['in_descripcion']);
+        $stmt->bindParam(':monto', $data['in_monto']);
+        $stmt->bindParam(':fecha', $data['in_fecha']);
+        $stmt->bindParam(':tipo', $data['in_tipo']);
         return $stmt->execute();
     }
 
@@ -64,12 +64,12 @@ class Ingreso {
                      IN_TIPO = :tipo
                   WHERE IN_ID = :id";
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':celula', $data['IN_CEL_ID']);
-        $stmt->bindParam(':persona', $data['IN_PER_ID']);
-        $stmt->bindParam(':descripcion', $data['IN_DESCRIPCION']);
-        $stmt->bindParam(':monto', $data['IN_MONTO']);
-        $stmt->bindParam(':fecha', $data['IN_FECHA']);
-        $stmt->bindParam(':tipo', $data['IN_TIPO']);
+        $stmt->bindParam(':celula', $data['in_cel_id']);
+        $stmt->bindParam(':persona', $data['in_per_id']);
+        $stmt->bindParam(':descripcion', $data['in_descripcion']);
+        $stmt->bindParam(':monto', $data['in_monto']);
+        $stmt->bindParam(':fecha', $data['in_fecha']);
+        $stmt->bindParam(':tipo', $data['in_tipo']);
         $stmt->bindParam(':id', $id);
         return $stmt->execute();
     }

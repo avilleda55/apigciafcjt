@@ -40,9 +40,9 @@ class Celula {
                   VALUES (:id, :nombre, :ubicacion, :responsable, 'A')";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id);
-        $stmt->bindParam(':nombre', $data['CE_NOMBRE']);
-        $stmt->bindParam(':ubicacion', $data['CE_UBICACION']);
-        $stmt->bindParam(':responsable', $data['CE_RESPONSABLE']);
+        $stmt->bindParam(':nombre', $data['ce_nombre']);
+        $stmt->bindParam(':ubicacion', $data['ce_ubicacion']);
+        $stmt->bindParam(':responsable', $data['ce_responsable']);
         return $stmt->execute();
     }
 
@@ -53,9 +53,9 @@ class Celula {
                      CE_RESPONSABLE = :responsable
                   WHERE CE_ID = :id";
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':nombre', $data['CE_NOMBRE']);
-        $stmt->bindParam(':ubicacion', $data['CE_UBICACION']);
-        $stmt->bindParam(':responsable', $data['CE_RESPONSABLE']);
+        $stmt->bindParam(':nombre', $data['ce_nombre']);
+        $stmt->bindParam(':ubicacion', $data['ce_ubicacion']);
+        $stmt->bindParam(':responsable', $data['ce_responsable']);
         $stmt->bindParam(':id', $id);
         return $stmt->execute();
     }
