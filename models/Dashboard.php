@@ -43,24 +43,28 @@ class Dashboard {
 }
 
 
-   public function getCombinedList($rol, $celulaId = null) {
-    $condIn = ["IN_TIPO != 'I'"];
-    $condEg = ["EG_ACTIVO = 'A'"];
+public function getCombinedList($rol, $celulaId = null) {
+    $condIn = ["i.IN_TIPO != 'I'"];
+    $condEg = ["e.EG_ACTIVO = 'A'"];
 
     if ($rol === 'TC') {
-        $condIn[] = "IN_CEL_ID = :celula";
-        $condEg[] = "EG_CEL_ID = :celula";
+        $condIn[] = "i.IN_CEL_ID = :celula";
+        $condEg[] = "e.EG_CEL_ID = :celula";
     }
 
     $whereIn = 'WHERE ' . implode(' AND ', $condIn);
     $whereEg = 'WHERE ' . implode(' AND ', $condEg);
 
     $query = "
-        SELECT IN_ID as id, IN_DESCRIPCION as descripcion, IN_MONTO as monto, IN_FECHA as fecha, 'Ingreso' as tipo 
-        FROM Ingresos $whereIn
+        SELECT i.IN_ID as id, i.IN_DESCRIPCION as descripcion, i.IN_MONTO as monto, i.IN_FECHA as fecha, 'Ingreso' as tipo, c.CE_NOMBRE as celula
+        FROM Ingresos i
+        JOIN Celulas c ON c.CE_ID = i.IN_CEL_ID
+        $whereIn
         UNION ALL
-        SELECT EG_ID, EG_DESCRIPCION, EG_MONTO, EG_FECHA, 'Egreso' 
-        FROM Egresos $whereEg
+        SELECT e.EG_ID, e.EG_DESCRIPCION, e.EG_MONTO, e.EG_FECHA, 'Egreso', c.CE_NOMBRE
+        FROM Egresos e
+        JOIN Celulas c ON c.CE_ID = e.EG_CEL_ID
+        $whereEg
         ORDER BY fecha DESC
     ";
 
@@ -71,6 +75,7 @@ class Dashboard {
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
 
 
   public function getMonthlyEvolution($rol, $celulaId = null) {
@@ -94,6 +99,38 @@ class Dashboard {
         FROM Egresos $whereEg 
         GROUP BY TO_CHAR(EG_FECHA, 'YYYY-MM')
         ORDER BY periodo
+    ";
+
+    $stmt = $this->conn->prepare($query);
+    if ($rol === 'TC') {
+        $stmt->bindParam(':celula', $celulaId);
+    }
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+public function getCombinedList($rol, $celulaId = null) {
+    $condIn = ["i.IN_TIPO != 'I'"];
+    $condEg = ["e.EG_ACTIVO = 'A'"];
+
+    if ($rol === 'TC') {
+        $condIn[] = "i.IN_CEL_ID = :celula";
+        $condEg[] = "e.EG_CEL_ID = :celula";
+    }
+
+    $whereIn = 'WHERE ' . implode(' AND ', $condIn);
+    $whereEg = 'WHERE ' . implode(' AND ', $condEg);
+
+    $query = "
+        SELECT i.IN_ID as id, i.IN_DESCRIPCION as descripcion, i.IN_MONTO as monto, i.IN_FECHA as fecha, 'Ingreso' as tipo, c.CE_NOMBRE as celula
+        FROM Ingresos i
+        JOIN Celulas c ON c.CE_ID = i.IN_CEL_ID
+        $whereIn
+        UNION ALL
+        SELECT e.EG_ID, e.EG_DESCRIPCION, e.EG_MONTO, e.EG_FECHA, 'Egreso', c.CE_NOMBRE
+        FROM Egresos e
+        JOIN Celulas c ON c.CE_ID = e.EG_CEL_ID
+        $whereEg
+        ORDER BY fecha DESC
     ";
 
     $stmt = $this->conn->prepare($query);
