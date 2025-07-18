@@ -39,7 +39,7 @@ class IngresoController {
     // Crear
     public function create() {
         $data = json_decode(file_get_contents("php://input"), true);
-        $currentUserId = $data['current_user_id'] ?? null;
+        $currentUserId = $data['in_per_id'] ?? null;
 
         if (empty($data['in_cel_id']) || empty($data['in_per_id']) || empty($data['in_monto']) || empty($data['in_fecha']) || empty($currentUserId)) {
             http_response_code(400);
@@ -70,7 +70,7 @@ class IngresoController {
     // Actualizar
     public function update($id) {
         $data = json_decode(file_get_contents("php://input"), true);
-        $currentUserId = $data['current_user_id'] ?? null;
+        $currentUserId = $data['in_per_id'] ?? null;
 
         $antes = $this->ingreso->getById($id)->fetch(PDO::FETCH_ASSOC);
         $updated = $this->ingreso->update($id, $data);
