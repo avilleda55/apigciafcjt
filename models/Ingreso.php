@@ -26,17 +26,14 @@ class Ingreso {
 
     // Generar nuevo ID
     public function generateNewId() {
-        $query = "SELECT IN_ID FROM {$this->table} ORDER BY IN_ID DESC LIMIT 1";
+        $query = "SELECT COUNT(*) as total FROM {$this->table}";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($row) {
-            $num = intval(substr($row['IN_ID'], 2)) + 1;
-        } else {
-            $num = 1;
-        }
+        $num = $row ? intval($row['total']) + 1 : 1;
         return 'IN' . str_pad($num, 5, '0', STR_PAD_LEFT);
     }
+
 
     // Crear ingreso
     public function create($id, $data) {

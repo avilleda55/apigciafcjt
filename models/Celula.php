@@ -23,15 +23,11 @@ class Celula {
     }
 
     public function generateNewId() {
-        $query = "SELECT CE_ID FROM {$this->table} ORDER BY CE_ID DESC LIMIT 1";
+        $query = "SELECT COUNT(*) as total FROM {$this->table}";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($row) {
-            $num = intval(substr($row['CE_ID'], 2)) + 1;
-        } else {
-            $num = 1;
-        }
+        $num = $row ? intval($row['total']) + 1 : 1;
         return 'CE' . str_pad($num, 5, '0', STR_PAD_LEFT);
     }
 
