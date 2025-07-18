@@ -99,7 +99,7 @@ class IngresoController {
     // Eliminar lógico
     public function delete($id) {
         $data = json_decode(file_get_contents("php://input"), true);
-        $currentUserId = $data['current_user_id'] ?? null;
+        $currentUserId = $data['in_per_id'] ?? null;
 
         $antes = $this->ingreso->getById($id)->fetch(PDO::FETCH_ASSOC);
         $deleted = $this->ingreso->delete($id);
