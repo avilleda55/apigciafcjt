@@ -28,7 +28,7 @@ class DashboardController {
         $summary = $this->dashboard->getSummary($rol, $celulaId);
         $combinedList = $this->dashboard->getCombinedList($rol, $celulaId);
         $monthlyEvolution = $this->dashboard->getMonthlyEvolution($rol, $celulaId);
-         $barChartData = $this->dashboard->getBarChartData($rol, $celulaId);
+        $barChartData = $this->dashboard->getBarChartData($rol, $celulaId);
 
         echo json_encode([
             'summary' => $summary,
