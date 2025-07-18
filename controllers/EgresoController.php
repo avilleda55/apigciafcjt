@@ -37,7 +37,7 @@ class EgresoController {
         $data = json_decode(file_get_contents("php://input"), true);
         $currentUserId = $data['current_user_id'] ?? null;
 
-        if (empty($data['EG_CEL_ID']) || empty($data['EG_PER_ID']) || empty($data['EG_MONTO']) || empty($data['EG_FECHA']) || empty($currentUserId)) {
+        if (empty($data['eg_cel_id']) || empty($data['eg_per_id']) || empty($data['eg_monto']) || empty($data['eg_fecha']) || empty($currentUserId)) {
             http_response_code(400);
             echo json_encode(['message' => 'Datos incompletos']);
             return;

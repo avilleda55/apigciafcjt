@@ -41,7 +41,7 @@ class PersonaController {
         $data = json_decode(file_get_contents("php://input"), true);
         $currentUserId = $data['current_user_id'] ?? null;
 
-        if (empty($data['PE_NOMBRE']) || empty($data['PE_EMAIL']) || empty($data['PR_AUTH_TEXT'])/* || empty($currentUserId)*/) {
+        if (empty($data['pe_nombre']) || empty($data['pe_email']) || empty($data['pr_auth_text']) || empty($currentUserId)) {
             http_response_code(400);
             echo json_encode(['message' => 'Datos incompletos']);
             return;

@@ -37,7 +37,7 @@ class CelulaController {
         $data = json_decode(file_get_contents("php://input"), true);
         $currentUserId = $data['current_user_id'] ?? null;
 
-        if (empty($data['CE_NOMBRE']) || empty($data['CE_RESPONSABLE']) || empty($currentUserId)) {
+        if (empty($data['ce_nombre']) || empty($data['ce_responsable']) || empty($currentUserId)) {
             http_response_code(400);
             echo json_encode(['message' => 'Datos incompletos']);
             return;

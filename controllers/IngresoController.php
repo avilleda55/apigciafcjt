@@ -41,7 +41,7 @@ class IngresoController {
         $data = json_decode(file_get_contents("php://input"), true);
         $currentUserId = $data['current_user_id'] ?? null;
 
-        if (empty($data['IN_CEL_ID']) || empty($data['IN_PER_ID']) || empty($data['IN_MONTO']) || empty($data['IN_FECHA']) || empty($currentUserId)) {
+        if (empty($data['in_cel_id']) || empty($data['in_per_id']) || empty($data['in_monto']) || empty($data['in_fecha']) || empty($currentUserId)) {
             http_response_code(400);
             echo json_encode(['message' => 'Datos incompletos']);
             return;
