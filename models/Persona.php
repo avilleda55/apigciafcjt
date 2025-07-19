@@ -115,7 +115,7 @@ class Persona {
         }
 
         //  Verificar contraseña actual
-        if (!password_verify($currentPassword, $user['PR_AUTH_TEXT'])) {
+        if (!password_verify($currentPassword, $user['pr_auth_text'])) {
             return ['success' => false, 'error' => 'La contraseña actual es incorrecta'];
         }
 
