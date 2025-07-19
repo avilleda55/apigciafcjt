@@ -9,17 +9,24 @@ class EstadoCuenta {
 
     private function getWhere($rol, $celulaId) {
         if ($rol === 'TG') {
-            return "WHERE IN_CEL_ID = '{$this->celulaMatrizId}'";
+            return "IN_CEL_ID = '{$this->celulaMatrizId}'";
         } elseif ($rol === 'TC') {
-            return "WHERE IN_CEL_ID = '$celulaId'";
+            return "IN_CEL_ID = '$celulaId'";
         }
         return ""; // P ve todo
     }
 
     public function getResumen($rol, $celulaId, $fechaInicio, $fechaFin) {
-        $where = $this->getWhere($rol, $celulaId);
-        $queryIngresos = "SELECT SUM(IN_MONTO) as total FROM Ingresos $where AND IN_FECHA BETWEEN :inicio AND :fin AND IN_TIPO != 'I'";
-        $queryEgresos = "SELECT SUM(EG_MONTO) as total FROM Egresos $where AND EG_FECHA BETWEEN :inicio AND :fin AND EG_ACTIVO = 'A'";
+        $condIn = $this->getWhere($rol, $celulaId);
+        $condEg = $this->getWhere($rol, $celulaId);
+
+        $whereIn = $condIn ? "WHERE $condIn AND IN_FECHA BETWEEN :inicio AND :fin AND IN_TIPO != 'I'"
+                        : "WHERE IN_FECHA BETWEEN :inicio AND :fin AND IN_TIPO != 'I'";
+        $whereEg = $condEg ? "WHERE $condEg AND EG_FECHA BETWEEN :inicio AND :fin AND EG_ACTIVO = 'A'"
+                        : "WHERE EG_FECHA BETWEEN :inicio AND :fin AND EG_ACTIVO = 'A'";
+
+        $queryIngresos = "SELECT SUM(IN_MONTO) as total FROM Ingresos $whereIn";
+        $queryEgresos = "SELECT SUM(EG_MONTO) as total FROM Egresos $whereEg";
 
         $stmtIn = $this->conn->prepare($queryIngresos);
         $stmtEg = $this->conn->prepare($queryEgresos);
@@ -41,16 +48,21 @@ class EstadoCuenta {
     }
 
     public function getLineaTiempo($rol, $celulaId, $fechaInicio, $fechaFin) {
-        $whereIn = $this->getWhere($rol, $celulaId);
-        $whereEg = $this->getWhere($rol, $celulaId);
+        $condIn = $this->getWhere($rol, $celulaId);
+        $condEg = $this->getWhere($rol, $celulaId);
+
+        $whereIn = $condIn ? "WHERE $condIn AND IN_FECHA BETWEEN :inicio AND :fin AND IN_TIPO != 'I'"
+                        : "WHERE IN_FECHA BETWEEN :inicio AND :fin AND IN_TIPO != 'I'";
+        $whereEg = $condEg ? "WHERE $condEg AND EG_FECHA BETWEEN :inicio AND :fin AND EG_ACTIVO = 'A'"
+                        : "WHERE EG_FECHA BETWEEN :inicio AND :fin AND EG_ACTIVO = 'A'";
 
         $query = "
             SELECT 'Ingreso' as tipo, TO_CHAR(IN_FECHA, 'YYYY-MM') as periodo, SUM(IN_MONTO) as total 
-            FROM Ingresos $whereIn AND IN_FECHA BETWEEN :inicio AND :fin AND IN_TIPO != 'I'
+            FROM Ingresos $whereIn
             GROUP BY periodo
             UNION ALL
             SELECT 'Egreso', TO_CHAR(EG_FECHA, 'YYYY-MM'), SUM(EG_MONTO)
-            FROM Egresos $whereEg AND EG_FECHA BETWEEN :inicio AND :fin AND EG_ACTIVO = 'A'
+            FROM Egresos $whereEg
             GROUP BY periodo
         ";
 
@@ -62,21 +74,26 @@ class EstadoCuenta {
     }
 
     public function getDetalle($rol, $celulaId, $fechaInicio, $fechaFin) {
-        $whereIn = $this->getWhere($rol, $celulaId);
-        $whereEg = $this->getWhere($rol, $celulaId);
+        $condIn = $this->getWhere($rol, $celulaId);
+        $condEg = $this->getWhere($rol, $celulaId);
 
         $extraCelula = $rol === 'P' ? ", c.CE_NOMBRE as celula_nombre" : "";
+
+        $whereIn = $condIn ? "WHERE $condIn AND IN_FECHA BETWEEN :inicio AND :fin AND IN_TIPO != 'I'"
+                        : "WHERE IN_FECHA BETWEEN :inicio AND :fin AND IN_TIPO != 'I'";
+        $whereEg = $condEg ? "WHERE $condEg AND EG_FECHA BETWEEN :inicio AND :fin AND EG_ACTIVO = 'A'"
+                        : "WHERE EG_FECHA BETWEEN :inicio AND :fin AND EG_ACTIVO = 'A'";
 
         $query = "
             SELECT IN_FECHA as fecha, IN_DESCRIPCION as descripcion, IN_MONTO as monto, 'Ingreso' as tipo $extraCelula
             FROM Ingresos i
             LEFT JOIN Celulas c ON i.IN_CEL_ID = c.CE_ID
-            $whereIn AND IN_FECHA BETWEEN :inicio AND :fin AND IN_TIPO != 'I'
+            $whereIn
             UNION ALL
             SELECT EG_FECHA, EG_DESCRIPCION, EG_MONTO, 'Egreso' $extraCelula
             FROM Egresos e
             LEFT JOIN Celulas c ON e.EG_CEL_ID = c.CE_ID
-            $whereEg AND EG_FECHA BETWEEN :inicio AND :fin AND EG_ACTIVO = 'A'
+            $whereEg
             ORDER BY fecha DESC
         ";
 
@@ -86,6 +103,7 @@ class EstadoCuenta {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
 
     public function getPastel($rol, $celulaId, $fechaInicio, $fechaFin) {
         $resumen = $this->getResumen($rol, $celulaId, $fechaInicio, $fechaFin);
