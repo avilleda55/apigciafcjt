@@ -59,11 +59,11 @@ class EstadoCuenta {
         $query = "
             SELECT 'Ingreso' as tipo, TO_CHAR(IN_FECHA, 'YYYY-MM') as periodo, SUM(IN_MONTO) as total 
             FROM Ingresos $whereIn
-            GROUP BY periodo
+            GROUP BY TO_CHAR(IN_FECHA, 'YYYY-MM')
             UNION ALL
-            SELECT 'Egreso', TO_CHAR(EG_FECHA, 'YYYY-MM'), SUM(EG_MONTO)
+            SELECT 'Egreso', TO_CHAR(EG_FECHA, 'YYYY-MM') as periodo, SUM(EG_MONTO)
             FROM Egresos $whereEg
-            GROUP BY periodo
+            GROUP BY TO_CHAR(EG_FECHA, 'YYYY-MM')
         ";
 
         $stmt = $this->conn->prepare($query);
