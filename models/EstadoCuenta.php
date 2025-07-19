@@ -7,18 +7,20 @@ class EstadoCuenta {
         $this->conn = $db;
     }
 
-    private function getWhere($rol, $celulaId) {
+   private function getWhere($rol, $celulaId, $tabla = 'IN') {
+        $campoCelula = ($tabla === 'IN') ? 'IN_CEL_ID' : 'EG_CEL_ID';
+
         if ($rol === 'TG') {
-            return "IN_CEL_ID = '{$this->celulaMatrizId}'";
+            return "$campoCelula = '{$this->celulaMatrizId}'";
         } elseif ($rol === 'TC') {
-            return "IN_CEL_ID = '$celulaId'";
+            return "$campoCelula = '$celulaId'";
         }
         return ""; // P ve todo
     }
 
     public function getResumen($rol, $celulaId, $fechaInicio, $fechaFin) {
-        $condIn = $this->getWhere($rol, $celulaId);
-        $condEg = $this->getWhere($rol, $celulaId);
+        $condIn = $this->getWhere($rol, $celulaId, 'IN');
+        $condEg = $this->getWhere($rol, $celulaId, 'EG');
 
         $whereIn = $condIn ? "WHERE $condIn AND IN_FECHA BETWEEN :inicio AND :fin AND IN_TIPO != 'I'"
                         : "WHERE IN_FECHA BETWEEN :inicio AND :fin AND IN_TIPO != 'I'";
@@ -48,8 +50,8 @@ class EstadoCuenta {
     }
 
     public function getLineaTiempo($rol, $celulaId, $fechaInicio, $fechaFin) {
-        $condIn = $this->getWhere($rol, $celulaId);
-        $condEg = $this->getWhere($rol, $celulaId);
+        $condIn = $this->getWhere($rol, $celulaId, 'IN');
+        $condEg = $this->getWhere($rol, $celulaId, 'EG');
 
         $whereIn = $condIn ? "WHERE $condIn AND IN_FECHA BETWEEN :inicio AND :fin AND IN_TIPO != 'I'"
                         : "WHERE IN_FECHA BETWEEN :inicio AND :fin AND IN_TIPO != 'I'";
@@ -74,8 +76,8 @@ class EstadoCuenta {
     }
 
     public function getDetalle($rol, $celulaId, $fechaInicio, $fechaFin) {
-        $condIn = $this->getWhere($rol, $celulaId);
-        $condEg = $this->getWhere($rol, $celulaId);
+        $condIn = $this->getWhere($rol, $celulaId, 'IN');
+        $condEg = $this->getWhere($rol, $celulaId, 'EG');
 
         $extraCelula = $rol === 'P' ? ", c.CE_NOMBRE as celula_nombre" : "";
 
