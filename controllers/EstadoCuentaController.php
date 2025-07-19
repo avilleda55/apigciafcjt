@@ -39,6 +39,9 @@ class EstadoCuentaController {
         $detalle = $this->estadoCuenta->getDetalle($rol, $celulaId, $fechaInicio, $fechaFin);
         $pastel = $this->estadoCuenta->getPastel($rol, $celulaId, $fechaInicio, $fechaFin);
         $barras = $rol === 'P' ? $this->estadoCuenta->getBarrasPorCelula($fechaInicio, $fechaFin) : [];
+        $celulaNombre = ($rol === 'P' || $rol === 'TG')
+            ? 'IAFCJ Tula de Allende'
+            : $this->estadoCuenta->getCelulaNombre($celulaId);
 
         echo json_encode([
             'resumen' => $resumen,
@@ -47,7 +50,8 @@ class EstadoCuentaController {
             'pastel' => $pastel,
             'barras' => $barras,
             'firmas' => $this->getFirmas($rol),
-            'pie_pagina' => $this->getPiePagina($rol, $celulaId)
+            'pie_pagina' => $this->getPiePagina($rol, $celulaId),
+            'celula_nombre' => $celulaNombre  
         ]);
 
         $this->db->closeConnection();

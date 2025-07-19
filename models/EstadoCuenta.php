@@ -133,4 +133,14 @@ class EstadoCuenta {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function getCelulaNombre($celulaId) {
+        $query = "SELECT CE_NOMBRE FROM Celulas WHERE CE_ID = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $celulaId);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ? $result['CE_NOMBRE'] : null;
+    }
+
 }
