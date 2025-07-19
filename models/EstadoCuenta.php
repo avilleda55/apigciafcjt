@@ -140,7 +140,7 @@ class EstadoCuenta {
         $stmt->bindParam(':id', $celulaId);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result ? $result['CE_NOMBRE'] : null;
+        return $result ? $result['ce_nombre'] : null;
     }
 
 }
