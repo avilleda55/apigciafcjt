@@ -102,12 +102,32 @@ class Persona {
     }
 
     // Cambiar contraseña
-    public function changePassword($id, $newPassword) {
-        $hash = password_hash($newPassword, PASSWORD_DEFAULT);
-        $query = "UPDATE {$this->table} SET PR_AUTH_TEXT = :password WHERE PE_ID = :id";
+    public function changePassword($id, $currentPassword, $newPassword) {
+        //  Obtener usuario
+        $query = "SELECT PR_AUTH_TEXT FROM {$this->table} WHERE PE_ID = :id AND PE_ACTIVO = 'A'";
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':password', $hash);
         $stmt->bindParam(':id', $id);
-        return $stmt->execute();
+        $stmt->execute();
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$user) {
+            return ['success' => false, 'error' => 'Usuario no encontrado o inactivo'];
+        }
+
+        //  Verificar contraseña actual
+        if (!password_verify($currentPassword, $user['PR_AUTH_TEXT'])) {
+            return ['success' => false, 'error' => 'La contraseña actual es incorrecta'];
+        }
+
+        //  Guardar nueva contraseña hasheada
+        $hash = password_hash($newPassword, PASSWORD_DEFAULT);
+        $updateQuery = "UPDATE {$this->table} SET PR_AUTH_TEXT = :password WHERE PE_ID = :id";
+        $updateStmt = $this->conn->prepare($updateQuery);
+        $updateStmt->bindParam(':password', $hash);
+        $updateStmt->bindParam(':id', $id);
+        $updateStmt->execute();
+
+        return ['success' => true];
     }
+
 }

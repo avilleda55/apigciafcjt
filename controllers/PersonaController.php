@@ -147,18 +147,22 @@ class PersonaController {
     // Cambiar contraseña
     public function changePassword($id) {
         $data = json_decode(file_get_contents("php://input"), true);
-        if (empty($data['new_password'])) {
+
+        if (empty($data['currentPassword']) || empty($data['newPassword'])) {
             http_response_code(400);
-            echo json_encode(['message' => 'Nueva contraseña requerida']);
+            echo json_encode(['message' => 'Se requieren contraseña actual y nueva']);
             return;
         }
-        $changed = $this->persona->changePassword($id, $data['new_password']);
-        if ($changed) {
-            echo json_encode(['message' => 'Contraseña actualizada']);
+
+        $result = $this->persona->changePassword($id, $data['currentPassword'], $data['newPassword']);
+
+        if (!$result['success']) {
+            http_response_code(400);
+            echo json_encode(['message' => $result['error']]);
         } else {
-            http_response_code(404);
-            echo json_encode(['message' => 'Persona no encontrada']);
+            echo json_encode(['message' => 'Contraseña actualizada']);
         }
+
         $this->db->closeConnection();
     }
 }
